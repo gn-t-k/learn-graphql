@@ -1,5 +1,7 @@
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
 import { GraphQLScalarType, GraphQLScalarTypeConfig, Kind } from "graphql";
+import graphQLPlayground from "graphql-playground-middleware-express";
 
 const typeDefs = `
   enum PhotoCategory {
@@ -218,11 +220,27 @@ const resolvers = {
   DateTime: new GraphQLScalarType(dateTimeConfig),
 };
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const main = async (): Promise<void> => {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-server.listen().then(({ url }) => {
-  console.log(`GraphQL Service running on ${url}`);
-});
+  await server.start();
+
+  const app = express();
+
+  server.applyMiddleware({ app });
+
+  app.get("/", (req, res) => res.end("Welcome to the PhotoShare API"));
+
+  app.get("/playground", graphQLPlayground({ endpoint: "/graphql" }));
+
+  app.listen({ port: 4000 }, () => {
+    console.log(
+      `GraphQL Server running at http://localhost:4000${server.graphqlPath}`
+    );
+  });
+};
+
+main();

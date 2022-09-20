@@ -656,16 +656,6 @@ apollo-server-types@^3.6.2:
     apollo-reporting-protobuf "^3.3.2"
     apollo-server-env "^4.2.1"
 
-apollo-server@^3.10.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/apollo-server/-/apollo-server-3.10.2.tgz#8d7859ba27f3d94c57a0a7065ae776f32dfc697a"
-  integrity sha512-iKYcbCGl32TxmV2YShiBbQqU8uJrwTopNi82KphKXcwgPyaZnMlNbVQOqiZSHVH4DtANAR4bB1cx8ORG+29NhQ==
-  dependencies:
-    "@types/express" "4.17.13"
-    apollo-server-core "^3.10.2"
-    apollo-server-express "^3.10.2"
-    express "^4.17.1"
-
 arg@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
@@ -1214,7 +1204,7 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-express@^4.17.1:
+express@^4.18.1:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.1.tgz#7797de8b9c72c857b9cd0e14a5eea80666267caf"
   integrity sha512-zZBcOX9TfehHQhtupq57OF8lFZ3UZi08Y97dwFCkD8p9d/d2Y3M+ykKcwaMDEL+4qyUolgBDX6AblpR3fL212Q==
@@ -1474,6 +1464,20 @@ grapheme-splitter@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
   integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
+
+graphql-playground-html@^1.6.30:
+  version "1.6.30"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.30.tgz#14c2a8eb7fc17bfeb1a746bbb28a11e34bf0b391"
+  integrity sha512-tpCujhsJMva4aqE8ULnF7/l3xw4sNRZcSHu+R00VV+W0mfp+Q20Plvcrp+5UXD+2yS6oyCXncA+zoQJQqhGCEw==
+  dependencies:
+    xss "^1.0.6"
+
+graphql-playground-middleware-express@^1.7.23:
+  version "1.7.23"
+  resolved "https://registry.yarnpkg.com/graphql-playground-middleware-express/-/graphql-playground-middleware-express-1.7.23.tgz#95aba44d801ff3c08b2246917d2901d2e7c35d3d"
+  integrity sha512-M/zbTyC1rkgiQjFSgmzAv6umMHOphYLNWZp6Ye5QrD77WfGOOoSqDsVmGUczc2pDkEPEzzGB/bvBO5rdzaTRgw==
+  dependencies:
+    graphql-playground-html "^1.6.30"
 
 graphql-tag@^2.11.0:
   version "2.12.6"
@@ -2538,7 +2542,7 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
 
-xss@^1.0.8:
+xss@^1.0.6, xss@^1.0.8:
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/xss/-/xss-1.0.14.tgz#4f3efbde75ad0d82e9921cc3c95e6590dd336694"
   integrity sha512-og7TEJhXvn1a7kzZGQ7ETjdQVS2UfZyTlsEdDOqvQF7GoxNfY+0YLCzBy1kPdsDDx4QuNAonQPddpsn6Xl/7sw==
