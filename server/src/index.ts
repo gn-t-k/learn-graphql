@@ -1,52 +1,12 @@
-import { ApolloServer } from "apollo-server-express";
+import fs from "fs";
+import path from "path";
+
+import { ApolloServer, gql } from "apollo-server-express";
 import express from "express";
 import { GraphQLScalarType, GraphQLScalarTypeConfig, Kind } from "graphql";
 import graphQLPlayground from "graphql-playground-middleware-express";
 
-const typeDefs = `
-  enum PhotoCategory {
-    SELFIE
-    PORTRAIT
-    ACTION
-    LANDSCAPE
-    GRAPHIC
-  }
-
-  scalar DateTime
-  type Photo {
-    id: ID!
-    url: String!
-    name: String!
-    description: String
-    category: PhotoCategory!
-    postedBy: User!
-    taggedUsers: [User!]!
-    created: DateTime!
-  }
-
-  type User {
-    githubLogin: ID!
-    name: String
-    avatar: String
-    postedPhotos: [Photo!]!
-    inPhotos: [Photo!]!
-  }
-
-  input PostPhotoInput {
-    name: String!
-    category: PhotoCategory=PORTRAIT
-    description: String
-  }
-
-  type Query {
-    totalPhotos: Int!
-    allPhotos(after: DateTime): [Photo!]!
-  }
-
-  type Mutation {
-    postPhoto(input: PostPhotoInput!): Photo!
-  }
-`;
+import { getContext } from "./context";
 
 let _id = 0;
 
@@ -221,9 +181,16 @@ const resolvers = {
 };
 
 const main = async (): Promise<void> => {
+  const typeDefs = gql(
+    fs.readFileSync(path.resolve(__dirname, "../../schema.gql"), "utf8")
+  );
+
+  const context = getContext();
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context,
   });
 
   await server.start();

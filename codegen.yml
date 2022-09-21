@@ -1,0 +1,33 @@
+overwrite: true
+schema: ./schema.gql
+# documents:
+#   - queries.gql
+#   - mutations.gql
+generates:
+  server/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-resolvers
+    config:
+        useIndexSignature: true
+        contextType: ../src/context/index#Context
+        enumsAsTypes: true
+        scalars:
+          DateTime: Date
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+  # client/generated/graphql.ts:
+  #   preset: import-types
+  #   presetConfig:
+  #     typesPath: ../../server/generated/graphql
+  #   plugins:
+  #     - typescript
+  #     - typescript-operations
+  #   config:
+  #     useIndexSignature: true
+  #     enumsAsTypes: true
+  #   hooks:
+  #     afterOneFileWrite:
+  #       - prettier --write
