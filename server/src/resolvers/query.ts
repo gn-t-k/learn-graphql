@@ -1,4 +1,5 @@
-import { QueryResolvers } from "generated/graphql";
+import { User } from "@/context";
+import { QueryResolvers, Resolvers } from "generated/graphql";
 
 export const getQuery = (): QueryResolvers => {
   const query: QueryResolvers = {
@@ -8,64 +9,48 @@ export const getQuery = (): QueryResolvers => {
       return photos.length;
     },
     allPhotos: async (_parent, args, context) => {
-      const [photos, users, tags] = await Promise.all([
+      const [maybePhotos, maybeUsers, maybeTags] = await Promise.all([
         context.get("photos"),
         context.get("users"),
         context.get("tags"),
       ]);
+      const photos = maybePhotos ?? [];
+      const users = maybeUsers ?? [];
+      const tags = maybeTags ?? [];
 
-      return (photos ?? [])
-        .filter(
-          (photo) =>
-            args.after &&
-            new Date(photo.created).getTime() > args.after.getTime()
-        )
-        .map((photo) => {
-          const maybePostedBy = (users ?? []).find(
-            (user) => user.githubLogin === photo.githubUser
-          );
+      return photos.map((photo) => {
+        const postedBy = users.find(
+          (user) => user.githubLogin === photo.githubUser
+        );
 
-          if (!maybePostedBy) {
-            throw new Error("author not found");
-          }
+        if (postedBy === undefined) {
+          throw new Error("user not found");
+        }
 
-          const postedBy = {
-            ...maybePostedBy,
-            postedPhotos: (photos ?? []).filter(
-              (photo) => photo.githubUser === maybePostedBy.githubLogin
-            ),
-            inPhotos: (tags ?? [])
-              .filter((tag) => tag.userID === maybePostedBy.githubLogin)
-              .map((tag) => tag.photoID)
-              .flatMap((photoId) => {
-                const photo = (photos ?? [])?.find(
-                  (photo) => photo.id === photoId
-                );
+        const taggedUsers = tags
+          .filter((tag) => tag.photoID === photo.id)
+          .map((tag) => tag.userID)
+          .flatMap((id) => {
+            const maybeUser = users.find((user) => user.githubLogin === id);
 
-                return photo ? [photo] : [];
-              }),
-          };
-
-          const taggedUserIds = (tags ?? [])
-            .filter((tag) => tag.photoID === photo.id)
-            .map((tag) => tag.userID);
-          const taggedUsers = taggedUserIds.flatMap((taggedUserId) => {
-            const user = users?.find(
-              (user) => user.githubLogin === taggedUserId
-            );
-
-            return user ? [user] : [];
+            return maybeUser === undefined ? [] : [maybeUser];
           });
 
-          return {
-            ...photo,
-            created: new Date(photo.created),
-            postedBy,
-            taggedUsers,
-          };
-        });
+        return {
+          id: photo.id,
+          url: photo.url,
+          name: photo.name,
+          description: photo.description,
+          postedBy,
+          taggedUsers,
+          category: photo.category,
+          created: new Date(photo.created),
+        };
+      });
     },
   };
 
   return query;
 };
+
+const contextUserToSchemaUser = (user: User): Resolvers["User"] => {};
